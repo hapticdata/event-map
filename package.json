@@ -1,14 +1,14 @@
 {
-  "name": "listener-map",
+  "name": "event-map",
   "version": "1.0.0",
-  "description": "quickly add a list of listeners to a view, inspired by Backbone.View event delegation",
+  "description": "quickly add a list of event listeners to a view, inspired by Backbone.View event delegation",
   "main": "index.js",
   "scripts": {
     "test": "node test -b"
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/hapticdata/listener-map"
+    "url": "http://github.com/hapticdata/event-map"
   },
   "keywords": [
     "addEventListener",
@@ -20,9 +20,9 @@
   "author": "Kyle Phillips",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/hapticdata/listener-map/issues"
+    "url": "https://github.com/hapticdata/event-map/issues"
   },
-  "homepage": "https://github.com/hapticdata/listener-map",
+  "homepage": "https://github.com/hapticdata/event-map",
   "dependencies": {
     "is-dom": "^1.0.5"
   },
