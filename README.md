@@ -1,6 +1,6 @@
 # event-map
 
-A module to ease the addition and removal of a mapping of listeners to a view. Inspired by Backbone.View's [delegateEvents](http://backbonejs.org/#View-delegateEvents). A mapping consists of an object where the key is an event and optionally a selector as well and the value is a listener function.
+A module to ease the addition and removal of a mapping of delegated listeners to a view. Inspired by Backbone.View's [delegateEvents](http://backbonejs.org/#View-delegateEvents). A mapping consists of an object where the key is an event and optionally a selector as well and the value is a listener function.
 
 [![NPM](https://nodei.co/npm/event-map.png)](https://npmjs.org/package/event-map)
 
@@ -14,7 +14,7 @@ npm install event-map --save
 
 ### eventMap([domElement,] map [, useCapture])
 
-On a domElement, append these listeners to the provided selectors:
+On a domElement, append these listeners delegated to the provided selectors:
 
 ```js
 var removeListeners = eventMap(domElement, {
@@ -25,7 +25,7 @@ var removeListeners = eventMap(domElement, {
 
 
 //at a later timer, clean up:
-removeListeners(); //or use eventMap.remove(domElement, map);
+removeListeners();
 ```
 
 If no domElement is provided, all events are placed on document:

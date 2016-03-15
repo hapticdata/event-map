@@ -1,3 +1,4 @@
+var delegate = require('delegate');
 var isDom = require('is-dom');
 
 /**
@@ -12,64 +13,67 @@ var isDom = require('is-dom');
  *  });
  */
 
-module.exports = exports = add;
-exports.add = add;
-exports.remove = remove;
+module.exports = add;
 
 /**
  * add a map of listeners to a dom element
  * @param {HTMLElement} [dom] optionally provide a dom node for root, defaults to document
- * @param {Object} map an object mapping events and selectors to functions
+ * @param {Object} mappings an object mapping events and selectors to functions
  * @param {Boolean} [useCapture] optionally choose useCapture for all listeners
  * @return {Function} for removing all listeners
  */
-function add(dom, map, useCapture){
-    applyListenerMap('addEventListener', dom, map, useCapture);
-
-    //return a function that will easily remove all of the listeners
-    return function(){
-        exports.remove(dom, map, useCapture);
-    };
-}
-
-function remove(dom, map, useCapture){
-    applyListenerMap('removeEventListener', dom, map, useCapture);
-}
-
-function applyListenerMap(fnStr, dom, map, useCapture){
+function add(dom, mappings, useCapture){
     if( !isDom(dom) ){
         //allow for dom to be optional
-        useCapture = map;
-        map = dom;
+        useCapture = mappings;
+        mappings = dom;
         dom = document;
     }
 
-    var event,
+    mappings = generateMap(mappings);
+
+    var delegations = mappings.map(function(item){
+        return delegate(dom, item.selector, item.eventType, item.listener, useCapture);
+    });
+
+    return function removeDelegates(){
+        delegations.forEach(function(dele){
+            dele.destroy();
+        });
+    };
+}
+
+
+/**
+ * parse the key and values of the event map and separate
+ * them between eventType, selector and listener
+ * @param {Object}
+ * @return Array<{selector, eventType, listener}>
+ */
+function generateMap(map){
+
+    var eventType,
         spaceIndex,
         selector,
-        listener;
+        listener,
+        result = [];
 
     for(var prop in map){
 
+        spaceIndex = prop.indexOf(' ');
+
         listener = map[prop];
+        eventType = (spaceIndex < 0) ? prop : prop.slice(0, spaceIndex);
+        selector = (spaceIndex < 0) ? '*' : prop.slice(spaceIndex+1);
 
-        if((spaceIndex = prop.indexOf(' ')) < 0){
-            //if no selector is provided, the event will be bound to the root element
-            dom[fnStr](prop, listener, useCapture);
-        } else {
-
-           event = prop.slice(0, spaceIndex);
-           selector = prop.slice(spaceIndex+1);
-
-            //for every selector provided, query all the elements
-            var nodes = dom.querySelectorAll(selector);
-
-            for( var j=0; j<nodes.length; j++){
-                //apply the event to every node for the current query
-                nodes[j][fnStr](event, listener, useCapture);
-            }
-
-        }
+        result.push({
+                selector: selector,
+                eventType: eventType,
+                listener: listener
+        });
     }
+
+    return result;
+
 }
 

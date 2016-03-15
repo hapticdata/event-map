@@ -1,6 +1,6 @@
 {
   "name": "event-map",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "quickly add a list of event listeners to a view, inspired by Backbone.View event delegation",
   "main": "index.js",
   "scripts": {
@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/hapticdata/event-map",
   "dependencies": {
+    "delegate": "^3.0.1",
     "is-dom": "^1.0.5"
   },
   "devDependencies": {
